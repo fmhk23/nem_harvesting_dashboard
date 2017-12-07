@@ -12,11 +12,17 @@ ui <- dashboardPage(
   dashboardHeader(title ="NEM Dashboard v0.01"),
   dashboardSidebar(
     sidebarMenu(
+      menuItem("Summary", tabName = "Summary", icon = icon("dashboard")),
       menuItem("Harvesting Historical Data", tabName = "Harvesting", icon = icon("dashboard"))
     )
   ),
   dashboardBody(
     tabItems(
+      tabItem(tabName = "Summary", 
+              h2("Daily Average Harvested Fee"),
+              plotlyOutput("daily_plot")
+              ),
+      
       tabItem(tabName = "Harvesting",
               fluidRow(
                 h2("NEM Mainet: Historical HARVESTED FEE"),

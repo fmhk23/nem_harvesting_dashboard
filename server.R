@@ -12,14 +12,13 @@ library(ggplot2)
 library(stringr)
 library(zoo)
 
-# blocks <- fread("./data/blocks.csv") %>% as.data.frame()
-blocks <- fread("./data/test_data.csv") %>% as.data.frame()
-
-blocks$TIMESTAMP <- as.numeric(blocks$TIMESTAMP)
-blocks$TOTALFEE <- as.numeric(blocks$TOTALFEE) / 1000000
-blocks$GMT_TIME <- as.POSIXct("2015-03-29 00:06:25", "GMT") + blocks$TIMESTAMP
+daily <- readRDS("./daily")
 
 shinyServer(function(input, output) {
+  
+  output$daily_plot <- renderPlotly({
+    plot_ly(x = ~daily$Date, y = ~daily$Fee, type = 'bar')
+  })
   
   observeEvent(input$reload,{
     begin <- as.POSIXct(as.Date(input$daterange[1]))
