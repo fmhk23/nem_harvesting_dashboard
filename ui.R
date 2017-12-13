@@ -16,7 +16,7 @@ ui <- navbarPage("NEM Harvesting Visualizer",
                                        
                                    ),
                             column(2,
-                                   radioButtons("moving", "Span", list("Daily", "Weekly", "Monthly"),
+                                   radioButtons("span", "Span", list("Daily", "Weekly", "Monthly"),
                                                 selected = "Daily")
                                    ),
                             column(2,
