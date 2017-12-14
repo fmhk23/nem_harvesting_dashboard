@@ -13,27 +13,50 @@ library(plotly)
 library(stringr)
 library(zoo)
 
-daily <- readRDS("./daily")
+daily <- readRDS("./daily2")
 #weekly <- readRDS("./weekly")
 #monthly <- readRDS("./monthly")
 
 shinyServer(function(input, output) {
   
+  Date <- daily$Date
+  
   observeEvent(input$reload,{
     begin <- as.Date(input$daterange[1])
     end <- as.Date(input$daterange[2] + 1)
     
+    # Switches depending on inputs
     tmp_data <- switch(input$span,
                        "Daily" = daily,
                        "Weekly" = weekly,
                        "Monthly" = monthly,
                        daily)
-    tmp_data <- tmp_data %>% dplyr::filter(between(Date, begin, end))
+    
+    Ycol <- switch(input$index,
+                   "Average" = "Mean",
+                   "Max" = "Max",
+                   "% of 0 blocks" = "Null",
+                   "Mean")
+    
+    tmp_data <- tmp_data %>% dplyr::filter(between(Date, begin, end)) %>% 
+      dplyr::select(Date, Ycol)
+    
+    colnames(tmp_data) <- c("Date", "Y")
+    Ylab <- input$index
+    
+    output$daily_plot <- renderPlotly({
+      plot_ly(x = ~tmp_data$Date, y = ~tmp_data$Y, type = 'bar') %>% 
+        layout(
+          yaxis = list(title = Ylab)
+        )
+    })
+    
     
   })
   
+  # Default
   output$daily_plot <- renderPlotly({
-    plot_ly(x = ~daily$Date, y = ~daily$Fee, type = 'bar')
+    plot_ly(x = ~daily$Date, y = ~daily$Mean, type = 'bar')
   })
   
   # observeEvent(input$reload,{

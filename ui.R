@@ -2,7 +2,7 @@ library(plotly)
 library(shiny)
 
 ui <- navbarPage("NEM Harvesting Visualizer",
-                 tabPanel("Historical",
+                 tabPanel("Histroical Harvested Fee",
                           fluidRow(
                             h2("Histroical Harvested Fee"),
                             column(4,
@@ -36,8 +36,8 @@ ui <- navbarPage("NEM Harvesting Visualizer",
                             plotlyOutput("daily_plot")
                             )
                           
-                          ),
-                 tabPanel("Component 2"))
+                          )
+                 )
 
 
 # ui <- dashboardPage(
